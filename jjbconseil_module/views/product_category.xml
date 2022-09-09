@@ -1,0 +1,12 @@
+<odoo>
+    <record model="ir.ui.view" id="rtsys_view_category_property_form">
+        <field name="name">rtsys.view.category.property.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="account.view_category_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_account_expense_categ_id']" position="after">
+                <field name="s_analytic_account_default" string="Compte analytique par défaut"/>
+            </xpath>
+        </field>             
+    </record>            
+</odoo>
