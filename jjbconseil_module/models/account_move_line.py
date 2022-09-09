@@ -9,8 +9,8 @@ class AccountMoveLine(models.Model):
     def create(self, values):
         if 'product_id' in values:
             prd = values.get('product_id')
-            if record.prd.categ_id.s_analytic_account_default:
-                record['analytic_account_id'] = record.product_id.categ_id.s_analytic_account_default
+            if prd.categ_id.s_analytic_account_default:
+                values['analytic_account_id'] = prd.categ_id.s_analytic_account_default
         
         return super(AccountMoveLine, self).create(values)
 #         record = super(AccountMoveLine, self).create(values)
