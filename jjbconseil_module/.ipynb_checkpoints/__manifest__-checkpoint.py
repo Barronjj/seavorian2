@@ -18,7 +18,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','product','analytic'],
+    'depends': ['base','account','product','analytic','account_analytic_default','account_analytic_default_purchase','analytic_enterprise'],
 
     # always loaded
     'data': [
