@@ -5,13 +5,22 @@ from odoo import fields, models, api
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     
-    @api.model
-    def create(self, values):
-        record = super(AccountMoveLine, self).create(values)
+    @api.onchange('product_id')
+    def _onchange_product_id_analytic_account(self):
+        for line in self:
+            if not line.product_id or line.display_type in ('line_section', 'line_note'):
+                continue
+
+            line.analytic_account_id = line._get_computed_analytic_account()
+            
+    
+    def _get_computed_analytic_account(self):
+        self.ensure_one()
+
+        if not self.product_id:
+            return False
         
-        if record:
-            # on cherche la catégorie de l'article, puis si elle a un compte analytique par défaut, on le met dans la ligne de facture
-            if record.product_id.categ_id.s_analytic_account_default:
-                record.analytic_account_id = record.product_id.categ_id.s_analytic_account_default
-                
-        return record
+        if self.product_id.categ_id.s_analytic_account_default:
+            return self.product_id.categ_id.s_analytic_account_default
+        
+        return False
