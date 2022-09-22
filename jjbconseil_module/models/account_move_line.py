@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -43,3 +45,22 @@ class AccountMoveLine(models.Model):
         
         
         return False
+    
+    
+    def action_view_account_analytic_line(self):
+        my_id = self.env['account.analytic.line'].search([('move_id', '=', self.id)])
+        _logger.critical("MY_ID="+str(my_id))
+        _logger.critical("MY_ID.ID="+str(my_id.id))
+        if my_id:
+            _logger.critical("TROUVE")
+            return {
+                'name': 'Ligne analytique',
+                'type': 'ir.actions.act_window',
+                'res_model': 'account.analytic.line',
+                'view_mode': 'form',
+                'res_id': my_id.id,
+                'target': 'current'
+            }
+        else:
+            _logger.critical("PAS TROUVE!!!!!!!!")
+            return False
