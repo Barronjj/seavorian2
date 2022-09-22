@@ -26,6 +26,9 @@
 
     # always loaded
     'data': [
+        'views/account_account.xml',
+#         'views/account_move.xml',
+        'views/crm_team.xml',
         'views/product_category.xml',
     ],
 }
