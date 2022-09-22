@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api
 
-import logging
-_logger = logging.getLogger(__name__)
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
@@ -15,15 +13,29 @@ class AccountMoveLine(models.Model):
 
             line.analytic_account_id = line._get_computed_analytic_account()
             
-    @api.model
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.move_id.type in ('in_invoice','in_refund','in_receipt'):
+            res = {
+                'domain' : {
+                'analytic_account_id' : [('name', 'ilike', "FCT_")],
+                }
+            }
+        else:
+            res = {}
+        
+        return res
+            
+   
+    @api.model_create_multi
     def create(self, values):
         record = super(AccountMoveLine, self).create(values)
         if record:
-            if record.move_id.type in ('in_invoice','in_refund','in_receipt','out_invoice','out_refund','out_receipt'):
-                record['analytic_account_id'] = record._get_computed_analytic_account()
+            for line in record:                
+                if line.move_id.type in ('in_invoice','in_refund','in_receipt','out_invoice','out_refund','out_receipt'):
+                    line.update({'analytic_account_id' : line._get_computed_analytic_account()})
         
-        return record    
-            
+        return record            
     
     def _get_computed_analytic_account(self):
         self.ensure_one()
@@ -49,10 +61,7 @@ class AccountMoveLine(models.Model):
     
     def action_view_account_analytic_line(self):
         my_id = self.env['account.analytic.line'].search([('move_id', '=', self.id)])
-        _logger.critical("MY_ID="+str(my_id))
-        _logger.critical("MY_ID.ID="+str(my_id.id))
         if my_id:
-            _logger.critical("TROUVE")
             return {
                 'name': 'Ligne analytique',
                 'type': 'ir.actions.act_window',
@@ -62,5 +71,4 @@ class AccountMoveLine(models.Model):
                 'target': 'current'
             }
         else:
-            _logger.critical("PAS TROUVE!!!!!!!!")
             return False
