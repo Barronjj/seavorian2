@@ -1,0 +1,12 @@
+<odoo>
+    <record model="ir.ui.view" id="rtsys_view_move_form">
+        <field name="name">rtsys.view.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='always_set_currency_id']" position="after">
+                <button name="action_view_account_analytic_line" type="object" icon="fa-pencil" class="btn btn-outline-primary btn-sm" string="View" />
+            </xpath>
+        </field>             
+    </record>            
+</odoo>
