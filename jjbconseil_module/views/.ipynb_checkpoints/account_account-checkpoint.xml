@@ -1,0 +1,12 @@
+<odoo>
+    <record model="ir.ui.view" id="rtsys_view_account_form">
+        <field name="name">rtsys.view.account.form</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='deprecated']" position="after">
+                <field name="s_analytic_account_default" string="Compte analytique par défaut"/>
+            </xpath>
+        </field>             
+    </record>            
+</odoo>	
