@@ -18,7 +18,7 @@ class AccountMoveLine(models.Model):
         if self.move_id.type in ('in_invoice','in_refund','in_receipt'):
             res = {
                 'domain' : {
-                'analytic_account_id' : [('name', 'ilike', "FCT_")],
+                'analytic_account_id' : ['|',('name', 'ilike', "FCT_"),('name', 'ilike', "PRJ_")],
                 }
             }
         else:
